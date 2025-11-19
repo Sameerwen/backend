@@ -77,10 +77,10 @@ app.get('/search', async (req, res) => {
     const query = req.query.q?.toLowerCase() || '';
     const lessons = await lessonsCollection.find({
       $or: [
-        { subject: { $regex: query, $options: 'i' } },
-        { location: { $regex: query, $options: 'i' } },
-        { price: { $regex: query, $options: 'i' } },
-        { spaces: { $regex: query, $options: 'i' } }
+        { subject: { $regex: query, $options: "i" } },
+        { location: { $regex: query, $options: "i" } },
+        { price: { $regex: query, $options: "i" } },
+        { spaces: { $regex: query, $options: "i" } }
       ]
     }).toArray();
     res.json(lessons);
