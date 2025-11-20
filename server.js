@@ -75,13 +75,16 @@ app.get('/lessons', async (req, res) => {
 app.get('/search', async (req, res) => {
   try {
     const query = req.query.q?.toLowerCase() || '';
+    const numberQuery = Number(query);
     const lessons = await lessonsCollection.find({
       $or: [
         { subject: { $regex: query, $options: "i" } },
         { location: { $regex: query, $options: "i" } },
-        { price: { $regex: query, $options: "i" } },
-        { spaces: { $regex: query, $options: "i" } }
-      ]
+        ...(isNaN(numberQuery) ? [] : [
+          { price: numberQuery },
+          { spaces: numberQuery }
+      ])
+    ]
     }).toArray();
     res.json(lessons);
   } catch (err) {
