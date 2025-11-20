@@ -76,6 +76,7 @@ app.get('/search', async (req, res) => {
   try {
     const query = req.query.q?.toLowerCase() || '';
     const numberQuery = Number(query);
+
     const lessons = await lessonsCollection.find({
       $or: [
         { subject: { $regex: query, $options: "i" } },
@@ -83,15 +84,17 @@ app.get('/search', async (req, res) => {
         ...(isNaN(numberQuery) ? [] : [
           { price: numberQuery },
           { spaces: numberQuery }
-      ])
-    ]
+        ])
+      ]
     }).toArray();
+
     res.json(lessons);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Search failed' });
   }
 });
+
 
 // POST new order
 app.post('/order', async (req, res) => {
